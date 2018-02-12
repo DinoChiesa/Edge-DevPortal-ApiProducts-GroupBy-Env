@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * @file
+ * Main module file.
+ */
+
+function apiproduct_groupby_env_modulename() {
+  $module_name = basename(__FILE__, '.module');
+  return $module_name;
+}
+
+
+/**
+ * Implements hook_form_FORM_ID_alter() for devconnect_developer_apps_edit_form.
+ *
+ * Sort the products buy environment.
+ */
+function apiproduct_groupby_env_form_devconnect_developer_apps_edit_form_alter(&$form, &$form_state) {
+  if ($form['api_product']['#type'] == 'select') {
+    $all_api_products = devconnect_developer_apps_get_api_products(TRUE);
+    $public_api_products = array();
+    $private_api_products = array();
+    foreach ($all_api_products as $name => $product) {
+      if ($product->isPublic) {
+        $public_api_products[$name] = $product;
+      }
+      else {
+        $private_api_products[$name] = $product;
+      }
+    }
+
+    // watchdog('apigee_groupby_env',
+    //          "public products !prods", array('!prods' => print_r($public_api_products, TRUE)),
+    //          WATCHDOG_NOTICE);
+
+    $originalOptions = $form['api_product']['#options'];
+
+    $opts_groupedby_environment = array();
+    foreach ($originalOptions as $optname => $displayString) {
+      $prodname = substr($optname, 5);
+      // watchdog('apigee_groupby_env',
+      //          "prodname !prodname", array('!prodname' => $prodname),
+      //          WATCHDOG_NOTICE);
+
+      if (isset($public_api_products[$prodname])) {
+        $productEntity = $public_api_products[$prodname];
+        // watchdog('apigee_groupby_env',
+        //          "product !prod", array('!prod' => print_r($productEntity, TRUE)),
+        //          WATCHDOG_NOTICE);
+        foreach ($productEntity->environments as $env_for_product) {
+          if (!isset($opts_groupedby_environment[$env_for_product])) {
+            $opts_groupedby_environment[$env_for_product] = array();
+          }
+          $opts_groupedby_environment[$env_for_product][$optname] = $displayString;
+        }
+      }
+    }
+
+    $form['api_product']['#options'] = $opts_groupedby_environment;
+    
+    // Expected Result:
+    //
+    // $form['test'] = array(
+    //   '#type' => 'select',
+    //   '#title' => 'test',
+    //   '#options' => array(
+    //     'prod' => array(
+    //       'APIProduct1' => 'display string for API Product 1'
+    //     ),
+    //     'test' => array(
+    //       'APIProduct2' => 'display string for API Product 2',
+    //       'APIProduct3' => 'display string for API Product 3'
+    //     )
+    //   )
+    // );
+  }
+}

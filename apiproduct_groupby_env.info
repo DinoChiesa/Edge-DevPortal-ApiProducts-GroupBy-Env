@@ -1,0 +1,10 @@
+name = DevConnect Group API Product by Environment
+description = Allows API Products to be grouped by environment
+core = 7.x
+package = Dev Portal - Extensions
+php = 5.3
+version = 7.x-4.3
+
+dependencies[] = devconnect_developer_apps
+
+# configure = admin/config/devconnect/apiproduct-access-extended
