@@ -33,6 +33,12 @@ When using this module, the list of API Products it might look like this:
 In HTML, this grouping is rendered with optgroup tags.
 
 
+## Installing
+
+You should download all the files for this module into a directory named sites/all/modules/custom/apiproduct_groupby_env .
+Then enable the module as normal, in the Drupal Module administration panel.
+
+
 ## Configuration
 
 There is  no administrative configuration for this module. It just works.
@@ -53,7 +59,9 @@ No special usage instructions.
 
 ## Support Status
 
-This module is not a supported part of the Apigee Edge Drupal-based developer portal.
+This module is not part of Drupal.
+This module is also not a supported part of the Apigee Edge Drupal-based developer portal.
+
 This module is open-source software. If you need assistance, you can try inquiring on [The Apigee Community Site](https://community.apigee.com).
 There is no service-level guarantee for responses to inquiries regarding this module.
 
